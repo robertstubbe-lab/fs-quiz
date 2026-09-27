@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Passar Försäljnings- och serviceprogrammet mig?</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#64748b;--accent:#2457d6;--accent2:#0f766e;--line:#dbe3ef}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(160deg,#eef4ff,#f8fafc);color:var(--ink)}
+main{max-width:560px;margin:auto;min-height:100dvh;padding:22px 16px 34px;display:flex;align-items:center}
+.card{width:100%;background:var(--card);border-radius:24px;padding:24px;box-shadow:0 16px 45px rgba(25,50,90,.12)}
+.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#e8efff;color:#244db5;font-size:.8rem;font-weight:800}
+h1{font-size:clamp(1.8rem,8vw,2.55rem);line-height:1.04;margin:14px 0 12px} h2{font-size:1.45rem;line-height:1.2}
+p{line-height:1.55}.muted{color:var(--muted)}
+button{width:100%;border:0;border-radius:16px;padding:15px 16px;font:inherit;font-weight:750;cursor:pointer}
+.primary{background:var(--accent);color:white;margin-top:12px}.answer{background:#f7f9fc;color:var(--ink);border:2px solid transparent;text-align:left;margin:8px 0}.answer:hover,.answer:focus{border-color:#7c9df0;background:#eef3ff}
+.top{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:.9rem}.bar{height:8px;background:#e8edf5;border-radius:99px;overflow:hidden;margin:12px 0 24px}.fill{height:100%;background:var(--accent);transition:.25s}
+.resultIcon{font-size:3.2rem}.score{font-size:2.8rem;font-weight:900;margin:4px 0}.meter{height:13px;background:#e8edf5;border-radius:99px;overflow:hidden}.meter>div{height:100%;background:var(--accent2)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.tag{background:#edf7f5;color:#0f665f;border-radius:999px;padding:8px 11px;font-weight:750;font-size:.86rem}
+.small{font-size:.84rem}.restart{background:#eef2f7;margin-top:10px}
+</style>
+</head>
+<body><main><section class="card" id="app"></section></main>
+<script>
+const questions=[
+["Du kommer till en plats där du nästan inte känner någon. Vad känns mest som du?",["Jag börjar gärna prata med någon","Jag avvaktar lite men kommer igång","Jag håller mig helst för mig själv","Det beror helt på situationen"]],
+["En person behöver hjälp att hitta rätt produkt eller lösning. Hur känns det?",["Kul – jag gillar att hjälpa människor","Helt okej om jag vet vad jag ska göra","Lite obekvämt","Jag undviker helst sådana situationer"]],
+["När du arbetar i grupp…",["gillar jag att bidra och få gruppen framåt","gör jag gärna min del när uppgiften är tydlig","arbetar jag helst ensam","låter jag helst andra bestämma"]],
+["Du får en idé som kan göra något bättre. Vad gör du?",["Berättar om idén och försöker testa den","Fundera först och tar upp den senare","Väntar tills någon frågar","Låter oftast bli"]],
+["Hur känns det att presentera något för andra?",["Spännande – jag gillar att kommunicera","Lite nervöst, men jag gör det","Ganska jobbigt","Jag vill helst slippa"]],
+["Vilken skoluppgift låter mest lockande?",["Skapa en kampanj eller exponering","Planera och genomföra ett riktigt projekt","Skriva en lång teoretisk text helt själv","Arbeta med tydliga rutinuppgifter"]],
+["En kund eller annan person är missnöjd. Vad gör du helst?",["Lyssnar, försöker förstå och hitta en lösning","Ber om hjälp och försöker lösa situationen tillsammans","Blir osäker och drar mig undan","Vill helst att någon annan tar över"]],
+["Hur känner du inför att lära dig sälja?",["Det verkar spännande att förstå människor och behov","Jag är nyfiken även om jag inte provat","Jag är tveksam men kan tänka mig att testa","Det intresserar mig inte"]],
+["Hur skulle du känna inför APL – att lära dig ute på en arbetsplats?",["Toppen, jag vill lära mig i verkligheten","Bra, även om det känns lite nervöst","Jag föredrar nästan alltid klassrummet","Jag vill helst inte vara ute på arbetsplatser"]],
+["Du och några klasskamrater får starta och driva ett UF-företag. Din reaktion?",["Kul! Jag vill vara med och skapa något","Spännande om vi hjälps åt","Jag är ganska tveksam","Det lockar mig inte alls"]],
+["Hur är du med planering och ansvar?",["Jag gillar att planera och få saker gjorda","Jag klarar det men behöver ibland stöd","Jag skjuter ofta upp saker","Jag vill helst att någon annan planerar"]],
+["Hur intresserad är du av sociala medier, digital marknadsföring eller att skapa innehåll?",["Mycket – jag gillar att skapa och testa","Ganska intresserad","Lite intresserad","Inte alls"]],
+["AI används allt mer i arbetslivet. Hur reagerar du?",["Jag vill lära mig använda AI smart och källkritiskt","Jag är nyfiken och vill förstå mer","Jag bryr mig inte särskilt mycket","Jag vill helst undvika digitala verktyg"]],
+["Vad känns mest motiverande med ett framtida jobb?",["Att möta människor och göra skillnad för kunden","Att utveckla idéer, företag eller projekt","Att få tydliga uppgifter med lite kontakt med andra","Att arbeta så självständigt som möjligt utan kundkontakt"]],
+["Vilket påstående stämmer bäst på dig?",["Jag gillar människor, variation och att lära genom att göra","Jag vill utvecklas och bli tryggare i mötet med andra","Jag trivs bäst med teori och mycket individuellt arbete","Jag vet inte än – jag vill upptäcka vad som passar mig"]]
+];
+// Per answer: match score and profile weights R=Relationsbyggare, E=Entreprenör, K=Kreatör, P=Problemlösare
+const profiles=["Relationsbyggaren","Entreprenören","Kreatören","Problemlösaren"];
+const icons=["🤝","🚀","✨","🧩"];
+let i=0,total=0,p=[0,0,0,0];
+const app=document.getElementById("app");
+function start(){i=0;total=0;p=[0,0,0,0];renderQ()}
+function home(){app.innerHTML=`<span class="badge">FS • 15 frågor • ca 3 minuter</span><h1>Passar Försäljnings- och serviceprogrammet mig?</h1><p>Det här är inget prov och det finns inga rätt eller fel svar. Välj det alternativ som känns mest som du.</p><p class="muted">I slutet får du en personlig profil och ser hur dina intressen kan passa med utbildningen.</p><button class="primary" onclick="start()">Starta testet</button><p class="small muted">Testet är vägledande – dina intressen och förmågor kan utvecklas.</p>`}
+function weights(q,a){
+ const base=[3,2,0,1][a];
+ let w=[0,0,0,0];
+ const map=[
+ [0,3],[0,3],[0,1],[1,3],[0,2],[2,1],[0,3],[0,1],[0,3],[1,2],[1,3],[2,1],[2,3],[0,1],[0,2]
+ ];
+ w[map[q][0]]+=3-a*.5; w[map[q][1]]+=2-a*.35;
+ if(q===6||q===10||q===12)w[3]+=2-a*.3;
+ return [base,w];
+}
+function choose(a){let [s,w]=weights(i,a);total+=s;w.forEach((x,j)=>p[j]+=x);i++; i<questions.length?renderQ():result()}
+function renderQ(){let q=questions[i];app.innerHTML=`<div class="top"><b>Fråga ${i+1} av ${questions.length}</b><span>${Math.round(i/questions.length*100)}%</span></div><div class="bar"><div class="fill" style="width:${i/questions.length*100}%"></div></div><h2>${q[0]}</h2>${q[1].map((x,j)=>`<button class="answer" onclick="choose(${j})">${x}</button>`).join("")}`}
+function result(){
+ const max=45, pct=Math.round(total/max*100), best=p.indexOf(Math.max(...p));
+ let level,title,text;
+ if(pct>=78){level="Mycket stark matchning";title="FS verkar ligga nära dina intressen";text="Dina svar visar flera drag som passar väl med en utbildning där kundmöten, service, försäljning, samarbete och praktiskt lärande står i centrum."}
+ else if(pct>=60){level="Stark matchning";title="Du har många styrkor som passar FS";text="Flera av dina svar passar bra med programmets arbetssätt. Du behöver inte kunna allt från början – utbildningen är till för att utveckla bland annat kommunikation, initiativ och service."}
+ else if(pct>=42){level="Värt att utforska";title="Det finns delar av FS som kan passa dig";text="Du verkar ha intressen som passar vissa delar av programmet. Ett bra nästa steg är att ta reda på mer om APL, UF, kundmöten och hur undervisningen fungerar i praktiken."}
+ else{level="Utforska vidare";title="Ta reda på vad som passar dig bäst";text="Dina svar pekar inte lika tydligt mot FS just nu. Det betyder inte att du inte kan gå programmet – fundera särskilt på hur du känner inför kundkontakt, samarbete, APL och praktiskt arbete."}
+ app.innerHTML=`<span class="badge">${level}</span><div class="resultIcon">${icons[best]}</div><h1>${title}</h1><div class="score">${pct}%</div><div class="meter"><div style="width:${pct}%"></div></div><p>${text}</p><h2>Din profil: ${profiles[best]}</h2><p>${profileText(best)}</p><div class="tags"><span class="tag">Service</span><span class="tag">Kommunikation</span><span class="tag">APL</span><span class="tag">UF</span><span class="tag">Digitalt & AI</span></div><p class="small muted">Resultatet är vägledande och inte ett antagnings- eller lämplighetstest. På FS får du träna och utveckla de här kompetenserna under utbildningen.</p><button class="primary" onclick="home()">Gör testet igen</button>`;
+}
+function profileText(n){return [
+"Du verkar få energi av människor och relationer. På FS kan den styrkan utvecklas genom kundmöten, service, kommunikation och APL.",
+"Du verkar gilla initiativ, ansvar och att få idéer att hända. UF, projekt, försäljning och APL kan passa den sidan av dig.",
+"Du verkar uppskatta idéer, kommunikation och att skapa något som syns. Marknadsföring, exponering, innehåll och digitala verktyg är naturliga delar att utforska.",
+"Du verkar trivas med att förstå situationer och hitta lösningar. Det är användbart i kundbemötande, planering, service och utveckling av verksamheter."
+][n]}
+home();
+</script></body></html>
